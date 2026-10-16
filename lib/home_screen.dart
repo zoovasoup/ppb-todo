@@ -4,7 +4,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'todo.dart';
 
 class HomeScreen extends StatefulWidget {
-  const new({super.key});
+  const HomeScreen({super.key});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -13,12 +13,39 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _controller = TextEditingController();
   final _inputFocus = FocusNode();
+  bool _inputFocused = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _inputFocus.addListener(_handleFocusChange);
+  }
+
+  @override
+  void dispose() {
+    _inputFocus.removeListener(_handleFocusChange);
+    _inputFocus.dispose();
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _handleFocusChange() {
+    setState(() {
+      _inputFocused = _inputFocus.hasFocus;
+    });
+  }
+
   var idCounter = 0;
   // final List<Todo> _todos;
   final List<Todo> _todos = [
     Todo(id: "1", title: "title1"),
     Todo(id: "2", title: "title2"),
     Todo(id: "3", title: "title3"),
+    Todo(id: "4", title: "title4"),
+    Todo(id: "4", title: "title4"),
+    Todo(id: "4", title: "title4"),
+    Todo(id: "4", title: "title4"),
+    Todo(id: "4", title: "title4"),
     Todo(id: "4", title: "title4"),
   ];
 
@@ -71,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
+                  _buildBottomBar(theme),
                 ],
               ),
             ),
@@ -97,8 +125,48 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _buildInput(ShadThemeData theme) {
-    return Row(children: [ShadInput()]);
+  Widget _buildBottomBar(ShadThemeData theme) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12),
+      child: Row(
+        children: [
+          Expanded(child: _buildInputRow(theme)),
+          const SizedBox(width: 8),
+          ShadButton(
+            height: 40,
+            decoration: ShadDecoration(
+              border: ShadBorder(radius: BorderRadius.circular(999)),
+            ),
+            child: const Text('Add'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInputRow(ShadThemeData theme) {
+    return ShadInput(
+      controller: _controller,
+      focusNode: _inputFocus,
+      placeholder: const Text('Add a task...'),
+      leading: const Icon(LucideIcons.plus, size: 16),
+      textInputAction: TextInputAction.done,
+      decoration: ShadDecoration(
+        disableSecondaryBorder: true,
+        color: theme.colorScheme.input,
+        border: ShadBorder.all(
+          radius: BorderRadius.circular(999),
+          color: theme.colorScheme.border,
+          width: 1,
+        ),
+        focusedBorder: ShadBorder.all(
+          radius: BorderRadius.circular(999),
+          color: theme.colorScheme.border,
+          width: 1,
+        ),
+        shadows: _inputFocused ? ShadShadows.lg : null,
+      ),
+    );
   }
 }
 
