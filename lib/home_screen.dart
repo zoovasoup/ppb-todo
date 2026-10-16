@@ -30,6 +30,12 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void _deleteTodo(Todo todo) {
+    setState(() {
+      _todos.removeWhere((t) => t.id == todo.id);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context);
@@ -57,6 +63,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: _TodoItem(
                                 todo: todo,
                                 onToggle: () => _toggleTodo(todo),
+                                onDelete: () => _deleteTodo(todo),
                               ),
                             ),
                           ),
@@ -96,10 +103,15 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _TodoItem extends StatelessWidget {
-  const _TodoItem({required this.todo, required this.onToggle});
+  const _TodoItem({
+    required this.todo,
+    required this.onToggle,
+    required this.onDelete,
+  });
 
   final Todo todo;
   final VoidCallback onToggle;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -125,7 +137,10 @@ class _TodoItem extends StatelessWidget {
               ),
             ),
           ),
-          ShadIconButton.ghost(icon: const Icon(LucideIcons.trash2, size: 16)),
+          ShadIconButton.ghost(
+            onPressed: onDelete,
+            icon: const Icon(LucideIcons.trash2, size: 16),
+          ),
         ],
       ),
     );
