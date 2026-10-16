@@ -49,6 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
     Todo(id: "4", title: "title4"),
   ];
 
+  void _addTodo() {
+    final title = _controller.text.trim();
+    if (title.isEmpty) return;
+    setState(() {
+      _todos.add(Todo(id: '${++idCounter}', title: title));
+    });
+    _controller.clear();
+  }
+
   void _toggleTodo(Todo todo) {
     final index = _todos.indexWhere((t) => t.id == todo.id);
     if (index == -1) return;
@@ -84,16 +93,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ..._todos.map(
-                            (todo) => Padding(
-                              padding: const EdgeInsets.only(bottom: 8),
-                              child: _TodoItem(
-                                todo: todo,
-                                onToggle: () => _toggleTodo(todo),
-                                onDelete: () => _deleteTodo(todo),
-                              ),
-                            ),
-                          ),
+                          _buildTodos(
+                            theme,
+                            _todos,
+                          ), // ← satu widget, tanpa spread
                         ],
                       ),
                     ),
@@ -105,6 +108,24 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildTodos(ShadThemeData theme, List<Todo> todos) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...todos.map(
+          (todo) => Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: _TodoItem(
+              todo: todo,
+              onToggle: () => _toggleTodo(todo),
+              onDelete: () => _deleteTodo(todo),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -134,6 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 8),
           ShadButton(
             height: 40,
+            onPressed: _addTodo,
             decoration: ShadDecoration(
               border: ShadBorder(radius: BorderRadius.circular(999)),
             ),
@@ -151,6 +173,7 @@ class _HomeScreenState extends State<HomeScreen> {
       placeholder: const Text('Add a task...'),
       leading: const Icon(LucideIcons.plus, size: 16),
       textInputAction: TextInputAction.done,
+      onSubmitted: (_) => _addTodo(),
       decoration: ShadDecoration(
         disableSecondaryBorder: true,
         color: theme.colorScheme.input,
