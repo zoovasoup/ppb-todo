@@ -3,6 +3,10 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 
 import './home_screen.dart';
 
+void main(List<String> args) {
+  runApp(const TodoApp());
+}
+
 class TodoApp extends StatelessWidget {
   const TodoApp({super.key});
 

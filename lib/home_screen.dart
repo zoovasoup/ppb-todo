@@ -11,6 +11,16 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
-    return const scaffol();
+    final theme = ShadTheme.of(context);
+    return Scaffold(
+      backgroundColor: theme.colorScheme.background,
+      body: SafeArea(
+        child: Center(child: Column(children: [Text("test")])),
+      ),
+    );
+  }
+
+  Widget _buildInput(ShadThemeData theme) {
+    return Row(children: [ShadInput()]);
   }
 }
