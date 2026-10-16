@@ -140,7 +140,7 @@ class _HomeScreenState extends State<HomeScreen> {
             style: theme.textTheme.h2.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 4),
-          Text('For your everyday need', style: theme.textTheme.muted),
+          Text('For your everyday task', style: theme.textTheme.muted),
         ],
       ),
     );
@@ -174,6 +174,7 @@ class _HomeScreenState extends State<HomeScreen> {
       leading: const Icon(LucideIcons.plus, size: 16),
       textInputAction: TextInputAction.done,
       onSubmitted: (_) => _addTodo(),
+      onPressedOutside: (_) => _inputFocus.unfocus(),
       decoration: ShadDecoration(
         disableSecondaryBorder: true,
         color: theme.colorScheme.input,
