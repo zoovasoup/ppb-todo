@@ -53,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final title = _controller.text.trim();
     if (title.isEmpty) return;
     setState(() {
-      _todos.add(Todo(id: '${++idCounter}', title: title));
+      _todos.insert(0, Todo(id: '${++idCounter}', title: title));
     });
     _controller.clear();
   }
